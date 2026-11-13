@@ -41,6 +41,18 @@ Khóa trong `results/experiment_lock.json` ngăn thay code/corpus/benchmark/conf
 
 ## Hỏi thử bằng tiếng Việt
 
+### Giao diện demo local
+
+Sau khi cài môi trường và chạy pipeline, mở giao diện:
+
+```powershell
+.\starter\.venv\Scripts\python.exe -B .\demo\app.py
+```
+
+Đợi `DEMO READY`, truy cập **http://127.0.0.1:8765**. Chọn A/B/C riêng lẻ hoặc AB, AC, BC, ABC. Tab pipeline cho xem PDF, text trước/sau chuẩn hóa, chunk, metadata và vector thật đã lưu. Ctrl+C để dừng server; không mở nhiều tiến trình trên cùng cổng.
+
+Phần diễn giải tiếng Việt được biên soạn cho các đoạn demo, không phải câu trả lời do E5 sinh hay bản dịch tự động toàn bộ nguồn. Nguyên văn tiếng Anh có thể mở để kiểm chứng. Kịch bản trình bày: [demo/DEMO.md](demo/DEMO.md). Demo đọc database đã có, không thay cấu hình hay kết quả benchmark.
+
 ```powershell
 $env:PYTHONIOENCODING = 'utf-8'
 .\starter\.venv\Scripts\python.exe -m starter.src.run --stage ask --question "Ai cung ứng lao động?" --chapter 4

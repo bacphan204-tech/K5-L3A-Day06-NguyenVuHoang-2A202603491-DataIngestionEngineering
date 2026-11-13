@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="vi">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Demo truy xuất kinh tế · A/B/C</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f4f6f8;color:#172534;font:15px/1.5 system-ui,Segoe UI,sans-serif}main{max-width:1440px;margin:auto;padding:32px 24px}header{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:20px}h1{font-size:26px;letter-spacing:-.6px;margin:0}p{margin:5px 0;color:#607080}.pill{font-size:12px;border:1px solid #d5dee7;border-radius:20px;padding:7px 12px;background:white;white-space:nowrap}.box{background:white;border:1px solid #dce3ea;border-radius:12px;padding:20px}label{font-weight:600}textarea{display:block;resize:vertical;width:100%;min-height:78px;border:1px solid #bdcbd7;border-radius:8px;padding:12px;font:inherit;margin:8px 0 16px}textarea:focus,select:focus{outline:2px solid #98c4ed;outline-offset:2px}.controls{display:flex;gap:20px;align-items:center;flex-wrap:wrap}.checks{display:flex;gap:15px;align-items:center}input[type=checkbox]{accent-color:#175a91;width:17px;height:17px;vertical-align:middle}select{font:inherit;border:1px solid #bdcbd7;border-radius:7px;padding:7px;background:white}button{font:inherit;cursor:pointer;border:0;border-radius:8px;background:#175a91;color:white;padding:10px 20px;font-weight:650}button:disabled{opacity:.5;cursor:wait}.examples{margin-top:16px;display:flex;gap:7px;flex-wrap:wrap}.example{padding:5px 10px;background:#eff4f9;color:#275170;font-size:12px;font-weight:500}.note{font-size:12px;color:#607080;margin-top:12px}.status{min-height:24px;margin:15px 0;color:#526577;font-size:13px}.results{display:grid;gap:16px;grid-template-columns:repeat(var(--cols,2),minmax(0,1fr));align-items:start}.strategy{padding:16px;background:#fff;border:1px solid #dce3ea;border-radius:12px}.strategy h2{margin:0;font-size:20px}.strategy-head{padding-bottom:12px;border-bottom:1px solid #e4eaf0}.strategy-head p{font-size:12px}.hit{padding:16px 0;border-bottom:1px solid #e4eaf0}.hit:last-child{border:0;padding-bottom:0}.hit-top{display:flex;align-items:center;justify-content:space-between;gap:6px;font-size:12px}.rank{font-weight:700}.score{color:#175a91;font-variant-numeric:tabular-nums}.source{display:block;color:#24648e;font-size:12px;margin:5px 0 10px}.text{white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;line-height:1.7;color:#293d4e}details{margin-top:10px;font-size:12px;color:#6c7a87}pre{white-space:pre-wrap;font-size:11px}.error{color:#ad342a}footer{margin-top:20px;font-size:12px;color:#6c7a87}@media(max-width:1000px){.results{grid-template-columns:1fr}header{align-items:flex-start;flex-direction:column}main{padding:20px 14px}}
+</style>
+<style>
+[hidden]{display:none!important}.tabs{display:flex;gap:8px;margin-bottom:16px}.tab{background:#e5edf4;color:#31516a}.tab.active{background:#175a91;color:#fff}.flow{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:16px 0}.step{padding:7px 10px;border:1px solid #d6e0e9;border-radius:7px;background:white;font-size:12px}.arrow{color:#8297a8}.page-controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.page-controls input{font:inherit;width:82px;padding:7px;border:1px solid #bdcbd7;border-radius:7px}.twocol{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}.panel h3{font-size:15px;margin:0 0 10px}.source-text{height:300px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;background:#f5f7fa;padding:12px;border-radius:6px;font:12px/1.7 Consolas,monospace;margin:0}.statline{font-size:12px;color:#607080;margin:8px 0}.chunk{border-top:1px solid #e2e8ed;padding:10px 0}.chunk pre{margin:7px 0;padding:10px;background:#f5f7fa;border-radius:6px;overflow-wrap:anywhere}.chunk b{font-size:12px}.vector{margin:16px 0}.vector code{overflow-wrap:anywhere;font-size:12px}.vector pre{background:#f5f7fa;padding:12px;border-radius:6px}@media(max-width:800px){.twocol{grid-template-columns:1fr}}
+</style>
+<main>
+<header><div><h1>Kho tri thức kinh tế</h1><p>Hỏi tiếng Việt · tìm bằng chứng tiếng Anh · so sánh A/B/C</p></div><span id="model" class="pill">Đang kết nối…</span></header>
+<nav class="tabs" aria-label="Chức năng demo"><button type="button" id="search-tab" class="tab active">Tra cứu & so sánh</button><button type="button" id="pipeline-tab" class="tab">Xem pipeline từ PDF</button></nav>
+<section id="search-view">
+<form id="form" class="box">
+<label for="question">Câu hỏi</label>
+<textarea id="question" maxlength="2000" required>Trong ví dụ xăng, giá và lượng cân bằng là bao nhiêu?</textarea>
+<div class="controls"><div class="checks" role="group" aria-label="Cấu hình cần so sánh"><span>So sánh:</span><label><input type="checkbox" name="strategy" value="A" checked> A</label><label><input type="checkbox" name="strategy" value="B" checked> B</label><label><input type="checkbox" name="strategy" value="C" checked> C</label></div>
+<label for="chapter">Phạm vi C: <select id="chapter"><option value="">Không lọc</option><option value="3">Chương 3 — Cung & cầu</option><option value="4">Chương 4 — Lao động & tài chính</option></select></label>
+<button id="submit" type="submit">Truy xuất top-3</button></div>
+<div class="examples" id="examples"></div>
+<div class="note">A: 500 ký tự, overlap 50 · B: ưu tiên ranh giới câu, tối đa 1000 ký tự · C: dùng chunk/vector B và thêm filter khi được cung cấp.<br>Diễn giải tiếng Việt được biên soạn theo các đoạn nguồn cho demo; E5 chỉ truy xuất, không tự dịch hay sinh câu trả lời. Mở bản gốc để đối chiếu.</div>
+</form>
+<div id="status" class="status" role="status" aria-live="polite">Chọn một hoặc nhiều cấu hình. Câu hỏi được tạo embedding một lần cho cùng lượt so sánh.</div>
+<section id="results" class="results" aria-label="Kết quả so sánh"></section>
+</section>
+<section id="pipeline-view" hidden>
+<div class="flow" aria-label="Pipeline"><span class="step">1. PDF</span><span class="arrow">→</span><span class="step">2. Trích xuất từng trang</span><span class="arrow">→</span><span class="step">3. Chuẩn hóa</span><span class="arrow">→</span><span class="step">4. Chunk A/B</span><span class="arrow">→</span><span class="step">5. Embedding</span><span class="arrow">→</span><span class="step">6. Chroma</span><span class="arrow">→</span><span class="step">7. Top-3</span></div>
+<div class="box"><div class="page-controls"><label for="page-number">Trang PDF:</label><input type="number" id="page-number" min="2" max="53" value="36"><button type="button" id="load-page">Xem dữ liệu thật</button><a id="page-pdf" href="/source.pdf#page=36" target="_blank" rel="noopener">Mở trang PDF</a></div><p class="note">PDF gồm 53 trang, chỉ xử lý trang nội dung 2–53. Chuẩn hóa giữ nguyên tiếng Anh của nguồn để so sánh, không phải bước dịch.</p><div id="page-status" class="statline" role="status"></div></div>
+<div id="pipeline-data" hidden>
+<div class="twocol"><div class="box panel"><h3>Text vừa trích xuất từ PDF</h3><div id="raw-stats" class="statline"></div><pre id="raw-text" class="source-text"></pre></div><div class="box panel"><h3>Text sau chuẩn hóa của pipeline</h3><div id="normalized-stats" class="statline"></div><pre id="normalized-text" class="source-text"></pre></div></div>
+<div class="box"><b>Đã xử lý gì?</b><p>Chuẩn hóa Unicode NFC và khoảng trắng, bỏ footer nhận diện được, nối các dòng text. Giữ nguồn, chương và số trang. Bảng/biểu đồ chưa được tái dựng; đoạn qua trang có thể thiếu ngữ cảnh.</p><details><summary>Xem bước trung gian: text sau xử lý đầu vào</summary><pre id="prepared-text" class="source-text"></pre></details></div>
+<div class="twocol"><div class="box panel"><h3 id="a-count">Chunk A</h3><p class="note">500 ký tự, overlap 50; có thể cắt giữa câu.</p><div id="a-chunks"></div></div><div class="box panel"><h3 id="b-count">Chunk B / C</h3><p class="note">Tối đa 1000 ký tự, ưu tiên ranh giới câu. C dùng nguyên các chunk này.</p><div id="b-chunks"></div></div></div>
+<div class="box vector"><h3>Embedding thật đã lưu</h3><p id="vector-info"></p><pre id="vector-values"></pre><details><summary>Mã chunk và revision model</summary><pre id="vector-meta"></pre></details><p class="note">Chỉ hiển thị 12 số đầu của vector, không tạo vector giả hay chạy lại ingest để demo.</p></div>
+<div class="box"><h3>Chroma → truy xuất top-3</h3><p id="collection-info"></p><p>Chroma lưu text, vector và metadata. Khi hỏi, model tạo vector câu hỏi một lần; A/B/C tìm trên cùng vector đó. C thêm filter chương khi được cung cấp. Kết quả gồm đoạn, điểm cosine và nguồn/trang.</p><button type="button" id="back-search">Chuyển sang demo truy xuất</button></div>
+</div>
+</section>
+<footer>Cosine là độ tương đồng, không phải xác suất trả lời đúng. Đây là truy xuất trực tiếp từ database, chưa sinh câu trả lời LLM. <a href="/source.pdf" target="_blank" rel="noopener">Mở PDF nguồn</a><br>Access for free at openstax.org · OpenStax, Rice University · CC BY-NC-SA 4.0</footer>
+</main>
+<script>
+const $=s=>document.querySelector(s);
+const samples=[
+['Giá xăng cân bằng','Trong ví dụ xăng, giá và lượng cân bằng là bao nhiêu?',''],
+['Ai cung lao động?','Ai cung ứng lao động?','4'],
+['Cầu dẫn xuất','Vì sao cầu lao động được gọi là cầu dẫn xuất?',''],
+['Điều dưỡng: A/B/C','Khi cầu điều dưỡng tăng đồng thời cung giảm, lương và lượng điều dưỡng cân bằng thay đổi thế nào?',''],
+['Ví dụ chưa tốt','Theo chương 3, giá trần là gì?','3']
+];
+for(const [label,q,c] of samples){const b=document.createElement('button');b.type='button';b.className='example';b.textContent=label;b.onclick=()=>{$('#question').value=q;$('#chapter').value=c;$('#question').focus()};$('#examples').append(b)}
+fetch('/api/info').then(r=>r.json()).then(d=>{$('#model').textContent=`E5-small · ${d.dimensions} chiều · local`;$('#model').title=`${d.model} | A ${d.counts.A} · B ${d.counts.B} · C ${d.counts.C} chunks`}).catch(()=>{$('#model').textContent='Mất kết nối server'});
+const descriptions={A:'Chia cố định · không lọc',B:'Theo ranh giới câu · không lọc',C:'Cùng chunk/vector B · lọc theo chương'};
+function explainVi(raw){
+ const text=raw.replace(/\s+/g,' ');
+ const rules=[
+  ['equilibrium price is $1.40 per gallon of gasoline and the equilibrium quantity is 600 million gallons','Trong ví dụ thị trường xăng, giá cân bằng là 1,40 USD/gallon và lượng cân bằng là 600 triệu gallon.'],
+  ['In labor markets job seekers (individuals) are the suppliers of labor','Trong thị trường lao động, người tìm việc là bên cung ứng lao động; doanh nghiệp và bên tuyển dụng là bên có nhu cầu lao động.'],
+  ['the more new automobiles consumers demand, the greater the number of workers automakers will need to hire','Khi người tiêu dùng cần mua nhiều ô tô hơn, hãng xe cần thuê thêm người. Cầu lao động phụ thuộc cầu sản phẩm nên được gọi là cầu dẫn xuất.'],
+  ['the demand for labor is based on the demand for the good or service that is produced','Cầu lao động dựa trên nhu cầu đối với hàng hóa hoặc dịch vụ được sản xuất. Đây là quan hệ giải thích cầu dẫn xuất.'],
+  ['The shifts in the two curves result in higher salaries for nurses, but the overall impact on the quantity of nurses is uncertain','Khi cầu điều dưỡng tăng đồng thời cung giảm, lương tăng. Số lượng điều dưỡng cân bằng tăng hay giảm còn tùy độ lớn tương đối của hai dịch chuyển.'],
+  ['The net effect on the equilibrium quantity of nurses is uncertain','Ví dụ đồ thị điều dưỡng cho thấy lương cao hơn, còn tác động cuối cùng lên số lượng điều dưỡng chưa chắc chắn.'],
+  ['Suppose that as the demand for nurses increases, the supply shrinks','Đoạn này đang xét cầu điều dưỡng tăng và cung giảm do nghỉ hưu, chi phí học tăng. Với chunk ngắn, phần kết luận có thể bị cắt; cần mở nguồn để kiểm tra đủ ý.'],
+  ['government might offer subsidies for nursing schools or nursing students','Chính phủ có thể hỗ trợ học phí hoặc đào tạo điều dưỡng để làm tăng cung lao động. Đây là một yếu tố tác động đến cung, chưa phải kết luận về cả cung và cầu cùng thay đổi.'],
+  ['government rules may require that nurses be hired to carry out certain medical procedures','Quy định yêu cầu điều dưỡng thực hiện một số thủ thuật có thể làm tăng nhu cầu tuyển điều dưỡng, đồng thời giảm nhu cầu đối với người ít được đào tạo hơn.'],
+  ['new computer and communications technologies will raise the pay of high-skill workers but reduce the pay of low-skill workers','Trong ví dụ của sách, công nghệ mới làm tăng nhu cầu và tiền lương của lao động kỹ năng cao, nhưng có thể giảm nhu cầu và tiền lương của lao động kỹ năng thấp.'],
+  ['How will the new technologies affect the wages of high-skill and low-skill workers?','Đoạn này đặt vấn đề công nghệ mới ảnh hưởng đến lương của lao động kỹ năng cao và thấp như thế nào, rồi giới thiệu cách phân tích cung–cầu. Riêng đoạn này chưa có đủ kết luận.'],
+  ['leads to a decrease in the quantity of labor demanded by employers','Tiền lương cao hơn làm doanh nghiệp giảm lượng lao động muốn thuê, khi xét theo quy luật cầu trên thị trường lao động. Đoạn này đang nói về lượng cầu lao động.'],
+  ['city council to enact a living wage law requiring employers to pay no less than $12 per hour','Ví dụ lương tối thiểu: mức cân bằng ban đầu là 10 USD/giờ. Khi đặt mức sàn 12 USD/giờ, số người muốn làm việc vượt số người được thuê, tạo dư cung lao động.'],
+  ['The original equilibrium (E0) lies at the intersection of supply curve S0 and demand curve D0','Ví dụ nhà cho thuê có mức cân bằng ban đầu 500 USD và 15.000 căn. Thu nhập hoặc sở thích thay đổi làm cầu tăng; mức cân bằng mới là 600 USD và 17.000 căn.'],
+  ['If demand shifts from D0 to D1, the new equilibrium would be at E1—unless a price ceiling prevents the price from rising','Trong ví dụ kiểm soát giá thuê, cầu tăng nhưng giá trần ngăn giá tăng. Lượng cung còn 15.000 căn, lượng cầu lên 19.000 căn nên xảy ra thiếu hụt.'],
+  ['A price ceiling is a legal maximum price','Giá trần là mức giá tối đa được phép trả theo quy định pháp luật cho hàng hóa hoặc dịch vụ.'],
+  ['price ceiling a legal maximum price','Giá trần được định nghĩa là mức giá tối đa hợp pháp.'],
+  ['A price floor is the lowest price that one can legally pay','Giá sàn là mức giá thấp nhất được phép trả hợp pháp cho hàng hóa hoặc dịch vụ.'],
+  ['A price ceiling that is set at a relatively high level is nonbinding','Nếu giá trần cao hơn giá cân bằng, nó chưa ràng buộc thị trường. Chỉ khi giá cân bằng tăng vượt mức trần thì giới hạn này mới có tác động.'],
+  ['The loss in social surplus that occurs when the economy produces at an inefficient quantity is called deadweight loss','Tổn thất vô ích là phần thặng dư xã hội bị mất khi thị trường sản xuất ở lượng không hiệu quả.'],
+  ['The sum of consumer surplus and producer surplus is social surplus','Thặng dư xã hội bằng tổng thặng dư tiêu dùng và thặng dư sản xuất.'],
+  ['Those who borrow money are on the demand side of the financial market','Người tiết kiệm hoặc đầu tư cung ứng vốn, còn người đi vay là phía có nhu cầu vốn trên thị trường tài chính.'],
+  ['any individual or firm who saves contributes to the supply of money','Người hoặc doanh nghiệp tiết kiệm góp vào cung vốn; cá nhân, doanh nghiệp hoặc chính phủ vay tiền góp vào cầu vốn.'],
+  ['When a firm discovers a new technology that allows the firm to produce at a lower cost, the supply curve will shift to the right','Khi công nghệ mới giúp giảm chi phí sản xuất, đường cung dịch sang phải. Cùng một mức giá có thể cung ứng nhiều hơn.'],
+  ['if the price of steel decreases, producing a car becomes less expensive','Giá thép giảm làm chi phí sản xuất ô tô giảm. Tại mỗi mức giá bán, hãng xe có thể cung cấp nhiều xe hơn; đường cung dịch sang phải.'],
+  ['The law of demand assumes that all other variables that affect demand','Quy luật cầu được xét khi các yếu tố khác ảnh hưởng đến cầu giữ nguyên: giá tăng thường làm lượng cầu giảm và ngược lại.'],
+  ['When the price is below equilibrium, there is excess demand, or a shortage','Khi giá thấp hơn cân bằng, lượng cầu vượt lượng cung nên thị trường thiếu hụt.'],
+  ['the other factors are held constant','Cách phân tích giữ các yếu tố khác không đổi, rồi xem xét từng thay đổi một, được gọi là ceteris paribus.'],
+  ['The likely reason is that people drive more in the summer','Giá xăng có thể biến động theo mùa vì người dân lái xe nhiều hơn vào mùa hè. Cung và cầu dầu cũng ảnh hưởng mức giá; không nên quy hết cho một nguyên nhân.'],
+  ['Identify the demanders and suppliers in a financial market','Đây chủ yếu là mục tiêu học phần tài chính: xác định bên cung/cầu vốn, tác động của lãi suất và giá trần. Đoạn này chưa trực tiếp trả lời mọi câu hỏi về các khái niệm đó.'],
+  ['The oat farmer does','Ví dụ người trồng yến mạch nhận tín hiệu từ giá tăng: giá có thể tăng do nhu cầu hoặc giá hàng thay thế thay đổi.'],
+  ['Demand is also based on ability to pay','Cầu không chỉ dựa trên nhu cầu hoặc mong muốn mà còn cần khả năng chi trả. Không có khả năng thanh toán thì chưa có cầu hữu hiệu.'],
+  ['supply curve shifts to the right, moving from the original supply curve S0 to the new supply curve S1','Ví dụ thời tiết thuận lợi làm tăng cung cá hồi. Giá cân bằng giảm từ 3,25 xuống 2,50 USD, lượng cân bằng tăng từ 250.000 lên 550.000.'],
+  ['A higher or lower price never shifts a demand curve','Giá của chính hàng hóa thay đổi tạo chuyển động dọc đường cầu hoặc đường cung; không tự làm cả đường dịch chuyển.'],
+  ['the quantity supplied exceeds the quantity demanded','Khi lượng cung vượt lượng cầu, thị trường có dư cung. Cần xem điều kiện giá và ngữ cảnh trong bản gốc để áp dụng đúng.']
+ ];
+ const matches=rules.filter(([phrase])=>text.includes(phrase)).slice(0,2).map(([,vi])=>vi);
+ if(matches.length)return matches.join('\n\n');
+ if(text.length<90)return 'Đoạn này rất ngắn, chủ yếu là tiêu đề hoặc một phần câu. Chưa đủ bằng chứng để kết luận; có thể mở nguyên văn để kiểm tra.';
+ return 'Chưa có diễn giải tiếng Việt được chuẩn bị cho đoạn này. Hãy mở nguyên văn tiếng Anh hoặc trang PDF bên dưới để đọc bằng chứng; hệ thống không tự suy ra đáp án khi chưa có đủ căn cứ.';
+}
+function element(tag,text,cls){const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e}
+let pipelineLoaded=false;
+function showView(pipeline){$('#pipeline-view').hidden=!pipeline;$('#search-view').hidden=pipeline;$('#pipeline-tab').classList.toggle('active',pipeline);$('#search-tab').classList.toggle('active',!pipeline);if(pipeline&&!pipelineLoaded)loadPage()}
+$('#search-tab').onclick=()=>showView(false);$('#pipeline-tab').onclick=()=>showView(true);$('#back-search').onclick=()=>showView(false);
+async function loadPage(){
+ const button=$('#load-page');button.disabled=true;$('#page-status').textContent='Đang đọc PDF, text và vector đã lưu…';
+ try{
+  const page=Number($('#page-number').value);if(!Number.isInteger(page)||page<2||page>53)throw Error('Chọn trang từ 2 đến 53.');
+  const response=await fetch('/api/page?page='+page);const d=await response.json();if(!response.ok)throw Error(d.error);
+  $('#raw-text').textContent=d.raw_text;$('#prepared-text').textContent=d.prepared_text;$('#normalized-text').textContent=d.normalized_text;
+  $('#raw-stats').textContent=`${d.stats.raw_chars.toLocaleString()} ký tự · ${d.stats.raw_linebreaks} ký tự xuống dòng`;
+  $('#normalized-stats').textContent=`${d.stats.normalized_chars.toLocaleString()} ký tự · ${d.stats.normalized_linebreaks} ký tự xuống dòng · nguồn/trang vẫn được giữ`;
+  $('#page-status').textContent=`PDF trang ${d.page} · trang in ${d.printed_page} · chương ${d.chapter}. Text và chunk đọc từ đúng artifacts của bài.`;$('#page-pdf').href=d.pdf_url;
+  for(const strategy of ['A','B']){const target=$('#'+strategy.toLowerCase()+'-chunks');target.replaceChildren();$('#'+strategy.toLowerCase()+'-count').textContent=`Chunk ${strategy}${strategy==='B'?' / C':''}: ${d.chunks[strategy].length} đoạn trên trang này`;
+   d.chunks[strategy].forEach((c,i)=>{const block=element('div',undefined,'chunk');block.append(element('b',`Đoạn ${i+1} · ${c.text.length} ký tự · vị trí ${c.metadata.start_char}–${c.metadata.end_char}`),element('pre',c.text.slice(0,260)+(c.text.length>260?'…':'')));const more=element('details');more.append(element('summary','Xem toàn bộ đoạn và metadata'),element('pre',c.text),element('pre',JSON.stringify({chunk_id:c.chunk_id,source:c.source,page:c.page,...c.metadata},null,2)));block.append(more);target.append(block)})
+  }
+  $('#vector-info').textContent=`${d.vector.model} · ${d.vector.dimensions} chiều · chuẩn L2 = ${d.vector.l2_norm.toFixed(6)} · ví dụ từ chunk B đầu tiên của trang này`;
+  $('#vector-values').textContent='['+d.vector.preview.map(v=>v.toFixed(6)).join(', ')+', …]';$('#vector-meta').textContent=JSON.stringify({chunk_id:d.vector.chunk_id,revision:d.vector.revision},null,2);
+  $('#collection-info').textContent=`Số chunk trong database: A ${d.collections.A} · B ${d.collections.B} · C ${d.collections.C}. Metric cosine, index HNSW, lưu bền vững trên đĩa.`;
+  $('#pipeline-data').hidden=false;pipelineLoaded=true;
+ }catch(error){$('#page-status').textContent=error.message}finally{button.disabled=false}
+}
+$('#load-page').onclick=loadPage;
+$('#form').addEventListener('submit',async event=>{
+ event.preventDefault();const selected=[...document.querySelectorAll('input[name=strategy]:checked')].map(e=>e.value);
+ if(!selected.length){$('#status').textContent='Cần chọn ít nhất một cấu hình.';$('#status').className='status error';return}
+ const button=$('#submit');button.disabled=true;$('#status').className='status';$('#status').textContent='Đang embedding câu hỏi và tìm kiếm…';$('#results').replaceChildren();
+ try{
+  const chapter=$('#chapter').value;const response=await fetch('/api/search',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:$('#question').value,strategies:selected,chapter:chapter?Number(chapter):null})});const data=await response.json();if(!response.ok)throw Error(data.error||'Truy xuất thất bại');
+  $('#results').style.setProperty('--cols',selected.length);
+  for(const strategy of selected){const r=data.results[strategy],panel=element('article',undefined,'strategy'),head=element('div',undefined,'strategy-head');head.append(element('h2',`Cấu hình ${strategy}`),element('p',descriptions[strategy]),element('p',`${r.filter.chapter?'Lọc chương '+r.filter.chapter:'Không áp dụng filter'} · ${r.search_ms.toFixed(1)} ms tìm kiếm`));panel.append(head);
+   r.hits.forEach((hit,i)=>{const card=element('div',undefined,'hit'),top=element('div',undefined,'hit-top');top.append(element('span',`KẾT QUẢ ${i+1}`,'rank'),element('span',`Cosine ${hit.score.toFixed(4)}`,'score'));const source=element('a',`PDF trang ${hit.metadata.page} · trang in ${hit.metadata.printed_page} · chương ${hit.metadata.chapter}`,'source');source.href=`/source.pdf#page=${hit.metadata.page}`;source.target='_blank';source.rel='noopener';card.append(top,source,element('div',explainVi(hit.text),'text'));const original=element('details');original.append(element('summary','Xem nguyên văn tiếng Anh'),element('div',hit.text,'text'));card.append(original);const details=element('details'),summary=element('summary','Thông tin nguồn / mã đoạn');details.append(summary,element('pre',JSON.stringify({chunk_id:hit.chunk_id,...hit.metadata},null,2)));card.append(details);panel.append(card)});$('#results').append(panel)
+  }
+  $('#status').textContent=`Đã chạy ${selected.join(' + ')} · embedding chung ${data.embedding_ms.toFixed(0)} ms · tổng ${data.total_ms.toFixed(0)} ms. ${chapter&&!selected.includes('C')?'A/B không dùng filter chương.':''}`;
+ }catch(error){$('#status').className='status error';$('#status').textContent=error.message}finally{button.disabled=false}
+});
+</script>
+</html>
