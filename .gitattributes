@@ -1,0 +1,6 @@
+# Keep frozen experiment inputs byte-stable on Windows Git checkouts.
+starter/src/*.py text eol=lf
+artifacts/strategies.json -text
+benchmark/questions.jsonl -text
+data/processed/pages.jsonl -text
+*.pdf binary

@@ -1,47 +1,76 @@
-# Day 06 · Data Ingestion Engineering
+# Data Ingestion Engineering — Bài cá nhân
 
-**Lab cá nhân** · **4 giờ** · **Dữ liệu tự chọn**
+Pipeline Python đọc tài liệu, chuẩn hóa, chia chunk, tạo embedding đa ngữ và truy xuất bằng Chroma persistent. Tài liệu tiếng Anh; benchmark gồm 20 câu tiếng Việt, chia cố định 15 dev / 5 test, 4 câu có filter chương (1 câu test).
 
-Biến tài liệu thành kho tri thức có thể truy xuất cho AI agent, rồi đo xem cách chuẩn bị dữ liệu nào hiệu quả nhất.
+## Dữ liệu và cấu hình
 
-| 📄 Dữ liệu | 🧩 Chiến lược | 🎯 Benchmark |
-|---|---|---|
-| Tối thiểu **30 trang nội dung** | Tối thiểu **3 cấu hình** | Tối thiểu **20 câu hỏi** |
+- `data/raw/economics-chapters-3-4.pdf`: 53 trang, gồm 1 trang bản quyền và 52 trang nội dung được chọn từ chương 3–4 của *Principles of Economics 3e*, OpenStax.
+- `data/manifest.json`: nguồn, giấy phép, hash, số trang/ký tự và cách tính trang. Mapping trang gốc: `data/excerpt_page_map.csv`.
+- Embedding: `intfloat/multilingual-e5-small`, 384 chiều, revision cố định trong `artifacts/strategies.json`; prefix `query: ` / `passage: `, chuẩn hóa L2, CPU.
+- Store: Chroma local persistent, cosine, HNSW approximate, lưu ở `.local/chroma`.
+- A: 500 ký tự, overlap 50. B: ưu tiên ranh giới câu, tối đa 1000 ký tự, overlap 0. C: cùng chunk/vector B, thêm filter `chapter` khi câu hỏi cung cấp.
+- A–B so sánh toàn bộ chính sách chunking; B–C chỉ thay filter. Chi phí API 0 USD; chưa đo điện/phần cứng.
 
-## Bắt đầu nhanh
+## Cài và chạy (PowerShell từ thư mục gốc)
 
-Dùng [starter PostgreSQL + pgvector](starter/README.md) để dựng database và hoàn thiện các hàm TODO, hoặc tự chọn vector store tương đương. Starter chỉ là khung: **bạn tự hiện thực pipeline và benchmark**.
+Máy hiện tại đã cài môi trường/model. Chạy lại toàn bộ:
 
-## 1. Xây pipeline
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\starter\scripts\run_all.ps1
+```
 
-![Đọc tài liệu, chuẩn hóa, chia chunk, tạo vector, lưu và kiểm tra](assets/ingestion-pipeline.svg)
+Máy mới dùng cùng lệnh và thêm `-Install` ở cuối. Cần Python (đã kiểm tra trên Windows, Python 3.14.6) và mạng lần đầu để tải thư viện/model. `Bypass` chỉ áp dụng tiến trình này, không đổi chính sách toàn máy. Không cần Docker hay API key.
 
-Chọn tài liệu được phép sử dụng; giữ **ID tài liệu, nguồn, trang/vị trí** và metadata phù hợp. Dùng embedding model thật qua API hoặc chạy local; lưu và truy xuất bằng pgvector, Qdrant, Chroma hoặc một store tương đương.
+Hoặc cài thủ công:
 
-## 2. So sánh và đánh giá
+```powershell
+python -m venv starter\.venv
+.\starter\.venv\Scripts\python.exe -m pip install -r .\starter\requirements.txt
+.\starter\.venv\Scripts\python.exe .\starter\scripts\download_model.py
+```
 
-![Ba chiến lược được đánh giá trên cùng corpus và benchmark dev/test](assets/benchmark-workflow.svg)
+Script tổng hợp trích xuất → kiểm chứng gold → ingest A/B/C → kiểm tra nạp lại không trùng → dev → khóa cấu hình → test → tạo báo cáo → kiểm tra kết quả/store.
 
-Dùng cùng dữ liệu, model và câu hỏi cho cả ba cấu hình. Tách **15 câu dev / 5 câu test** trước khi chạy; chọn cấu hình trên dev, rồi đánh giá test sau khi cố định. Mỗi câu hỏi cần có đoạn bằng chứng và trang nguồn; thiết kế bộ câu hỏi và đánh giá theo [BENCHMARK.md](BENCHMARK.md).
+```powershell
+.\starter\.venv\Scripts\python.exe -m starter.src.run --stage validate
+.\starter\.venv\Scripts\python.exe -m starter.src.run --stage all
+.\starter\.venv\Scripts\python.exe .\starter\scripts\build_report.py
+```
 
-Đánh giá theo năm khía cạnh: **độ chính xác truy xuất**, **tính mạch lạc của chunk**, **tính hữu dụng của metadata**, **chất lượng grounding** và **tác động của chiến lược dữ liệu**. Giải thích lựa chọn bằng kết quả, ví dụ lỗi và các đánh đổi.
+Khóa trong `results/experiment_lock.json` ngăn thay code/corpus/benchmark/config sau khi xem test. Không tinh chỉnh theo test rồi báo kết quả như holdout độc lập. HNSW có thể có biến động nhỏ; số đo thời gian phụ thuộc tải máy.
 
-## 3. Chuẩn bị bài nộp
+## Hỏi thử bằng tiếng Việt
 
-1. Chạy pipeline và lưu cấu hình, kết quả top-3, trace cùng nhãn đánh giá thủ công.
-2. Điền [thông tin học viên](STUDENT.md), [nhật ký thí nghiệm](artifacts/experiment_log.csv) và bản sao [mẫu báo cáo cá nhân](report/individual/MSSV_HoTen.md).
-3. Kiểm tra mã nguồn, cách chạy, manifest dữ liệu và checklist trong [SUBMISSION.md](SUBMISSION.md).
+```powershell
+$env:PYTHONIOENCODING = 'utf-8'
+.\starter\.venv\Scripts\python.exe -m starter.src.run --stage ask --question "Ai cung ứng lao động?" --chapter 4
+```
 
-## Tài liệu hướng dẫn
+Trả top-3 đoạn tiếng Anh và metadata nguồn/trang; chưa sinh câu trả lời LLM. `page` là trang PDF rút gọn tính từ 1, `printed_page` là trang in, `original_pdf_page` là trang PDF gốc. Trang bản quyền không index.
 
-| Bạn cần tìm | Tài liệu |
+## Bài nộp và kết quả
+
+| Thư mục/file | Nội dung |
 |---|---|
-| Setup baseline PostgreSQL + pgvector | [starter/README.md](starter/README.md) |
-| Các bước làm và cách tính chỉ số | [GUIDE.md](GUIDE.md) |
-| Tiến độ trong 4 giờ | [CHECKPOINTS.md](CHECKPOINTS.md) |
-| Năm tiêu chí benchmark và bộ câu hỏi | [BENCHMARK.md](BENCHMARK.md) |
-| Tiêu chí chấm điểm | [RUBRIC.md](RUBRIC.md) |
-| Quy tắc sử dụng dữ liệu, AI và API | [RULES.md](RULES.md) |
-| Cách nộp bài | [SUBMISSION.md](SUBMISSION.md) |
+| `STUDENT.md` | Thông tin học viên, repo và commit |
+| `starter/src/`, `starter/scripts/`, `starter/requirements.txt` | Code và cách tái lập |
+| `data/` | Corpus, manifest, mapping, text từng trang và log trích xuất |
+| `benchmark/questions.jsonl` | Câu hỏi, split, đáp án, gold evidence và nguồn thay thế |
+| `artifacts/` | Cấu hình và nhật ký thí nghiệm |
+| `results/metrics.csv`, `ingestion_stats.csv`, `environment.json` | Chỉ số dev/test, tài nguyên và phiên bản chạy |
+| `results/traces.jsonl`, `chunks_*.jsonl` | Trace top-3 và chunk có nguồn/offset |
+| `results/metrics_adjudicated.csv`, `results/audit/retrieval_adjudication.csv` | Điểm sau đối chiếu evidence và 180 quyết định từng kết quả; giữ riêng điểm strict ban đầu |
+| `results/audit/` | Mẫu và nhãn đánh giá coherence, metadata, grounding |
+| `report/individual/2A202603491_NguyenVuHoang.md` | Báo cáo cá nhân |
 
-[data/format-example.json](data/format-example.json) chỉ minh họa định dạng, không phải corpus đủ điều kiện. Phần xử lý và benchmark do bạn tự hiện thực; không bắt buộc xây chatbot.
+Hit yêu cầu đúng nguồn/trang và đủ evidence trong một chunk. Phép chấm tự động dùng khớp evidence đã chuẩn hóa; có thể bỏ sót bằng chứng tương đương, cần đối chiếu riêng. Grounding không phải độ đúng câu trả lời LLM. Hai tập cùng chương/chủ đề, test chỉ có 5 câu nên không suy rộng kết quả.
+
+Đối chiếu evidence được AI thực hiện sau khi đã xem test, có quote, lý do và hash câu hỏi/chunk để kiểm chứng. Không thay benchmark, model hay thứ tự truy xuất và không chọn lại cấu hình từ điểm đối chiếu. `metrics.csv` vẫn là điểm strict dùng để chọn B trước test; bảng sau đối chiếu được ghi nhãn riêng, không gọi là test mới hay kết quả chấm độc lập của học viên.
+
+Script kiểm tra còn chạy một Chroma tạm bằng vector thật để thử nạp lại, xóa chunk cũ, cập nhật metadata, filter, dữ liệu sai chiều và mở lại store trong tiến trình khác. Kết quả nằm trong `results/validation.json`. Khóa hash dùng text chuẩn hóa LF và đường dẫn tương đối thống nhất; hash gốc và lịch sử sửa lỗi đóng gói sau test được giữ trong `results/experiment_lock.json`.
+
+Các bảng audit đã có điểm, lý do và người chấm thực tế là Codex AI hỗ trợ đọc/đối chiếu nguồn. Phương pháp và hạn chế nằm trong `results/audit/sampling.json`; `student_confirmed=false` vì chưa ghi nhận học viên tự xác nhận. Cột `human_correct` trong metadata là tên cột cũ, không có nghĩa người học đã trực tiếp chấm. Cần đọc lại nguồn/gold, thông tin học viên và repo/commit trước khi nộp. Học viên phải hiểu và giải thích được bài.
+
+`.local/` chứa model/database và `starter/.venv/` chứa môi trường chạy tại máy, được Git bỏ qua. Không nộp hai thư mục này; có thể tạo lại bằng lệnh cài/chạy trên.
+
+Access for free at openstax.org. OpenStax, Rice University, *Principles of Economics 3e*. Văn bản trích xuất, evidence và trace chứa nội dung sách được chia sẻ theo CC BY-NC-SA 4.0, giữ ghi nguồn. Giấy phép này không thay giấy phép dependencies bên thứ ba.

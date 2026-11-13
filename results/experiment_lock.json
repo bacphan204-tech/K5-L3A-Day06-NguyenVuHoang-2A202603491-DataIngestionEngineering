@@ -1,0 +1,67 @@
+{
+  "fingerprints": {
+    "artifacts/strategies.json": "0008661818eacff8eee35f0a1471bd72e7d3da36decc619ed1ead63cbc831aed",
+    "benchmark/questions.jsonl": "a39113671197d703c5857937783d4de38d7fbeed350a6740739eb4e0b39458e6",
+    "data/processed/pages.jsonl": "7039bb732326a4294979358d53164c942545e5249d831b018611d79c9c57ca8c",
+    "starter/src/__init__.py": "86b6f304b218783f00e27c050a111049f5dc07fd98194c556deb0633d7c8980a",
+    "starter/src/chunking.py": "b9dea29f5cc63b711b7965388a6cd44f023928dfac5fc32213da39dceb3d5d12",
+    "starter/src/embeddings.py": "123a0dd798e1401c6bde660e19a785751030d0f84a0d3b49cf11d4238f478d9a",
+    "starter/src/evaluation.py": "c9e8170599fc035f943854d33aa1ca0b008bab592f757c0194c65a157ccb33d1",
+    "starter/src/ingestion.py": "e45c1c482ddfc919f38eeead1dda81af707a7a83b37d4f9e5054b3a70bb1e8f0",
+    "starter/src/models.py": "5380cd16fcd0d4396db5dda3a205c148c148a5fd6e90b90d060dd546e39bb68d",
+    "starter/src/run.py": "82a0e162690c64e0a412f3bdc745b728896b34409e3439e9c21a3d4766e020e3",
+    "starter/src/store.py": "76b004475e8df4f0cbd0ab2eb85d6530b04c73f4a27effa81db57c79f267f073"
+  },
+  "selected_on_dev": "B",
+  "selection_rule": "Before test: highest strict dev Evidence Hit@3, then Hit@1, then fewer chunks, then alphabetic strategy. Human grounding remains a separate audit, not a tuning signal.",
+  "model_revision": "614241f622f53c4eeff9890bdc4f31cfecc418b3",
+  "frozen_at_utc": "2026-11-13T10:47:12.130386+00:00",
+  "original_fingerprints": {
+    "artifacts\\strategies.json": "0008661818eacff8eee35f0a1471bd72e7d3da36decc619ed1ead63cbc831aed",
+    "benchmark\\questions.jsonl": "2336133389fa5a5f8530eb726ccc763cffeeca5e103867c8802d6b36124b1532",
+    "data\\processed\\pages.jsonl": "df96070b2901e3a15f2057f663ed6659fb486884bdf42d25ef392b9402d36197",
+    "starter\\src\\__init__.py": "9d51e4a4713565f1b69bb8f3a0d8ac2c6c8730961e738a65f7a7a4ebd2a593a8",
+    "starter\\src\\chunking.py": "b9dea29f5cc63b711b7965388a6cd44f023928dfac5fc32213da39dceb3d5d12",
+    "starter\\src\\embeddings.py": "123a0dd798e1401c6bde660e19a785751030d0f84a0d3b49cf11d4238f478d9a",
+    "starter\\src\\evaluation.py": "c9e8170599fc035f943854d33aa1ca0b008bab592f757c0194c65a157ccb33d1",
+    "starter\\src\\ingestion.py": "e45c1c482ddfc919f38eeead1dda81af707a7a83b37d4f9e5054b3a70bb1e8f0",
+    "starter\\src\\models.py": "9f26a14cd6139c7b608df067894274308ae7b5c2c2ccd10566079c345fae1710",
+    "starter\\src\\run.py": "eb055e2f2204dab2ca9ee164b6f69d021ac74ea789f5b448466f6ff5e271e8f8",
+    "starter\\src\\store.py": "76b004475e8df4f0cbd0ab2eb85d6530b04c73f4a27effa81db57c79f267f073"
+  },
+  "fingerprint_format": "sha256 of UTF-8 text with normalized LF and POSIX relative paths",
+  "maintenance_history": [
+    {
+      "at_utc": "2026-11-13T11:32:50.311421+00:00",
+      "reason": "Packaging/reproducibility fix: normalize line endings and relative path separators in fingerprint() only. Embedding, chunks, queries, filters and strict evaluation logic unchanged.",
+      "changed_source_file": "starter/src/run.py",
+      "before_raw_sha256": "eb055e2f2204dab2ca9ee164b6f69d021ac74ea789f5b448466f6ff5e271e8f8",
+      "after_raw_sha256": "82a0e162690c64e0a412f3bdc745b728896b34409e3439e9c21a3d4766e020e3",
+      "benchmark_config_corpus_raw_hashes_unchanged": true,
+      "test_previously_seen": true,
+      "rerun_scope": "Reproduction check, not a new independent holdout"
+    }
+  ],
+  "reproduction_checks": [
+    {
+      "checked_at_utc": "2026-11-13T11:37:29.550617+00:00",
+      "passed": true,
+      "submitted_file_count": 44,
+      "fresh_chroma_database": true,
+      "source_line_endings": "LF, matching Git checkout policy",
+      "dependencies": "Shared installed Python environment; not a fresh dependency install",
+      "model": "Copied pinned model, offline loading, no reuse of original vector store",
+      "strict_metrics_identical": true,
+      "adjudicated_metrics_identical": true,
+      "trace_count": 60,
+      "top3_records": 180,
+      "chunks": {
+        "A": 344,
+        "B": 183,
+        "C": 183
+      },
+      "fingerprints_sha256": "2698825a1f25f75cc1aceb73e304ac0e7ebe40afad216e2c0a3d131bfc622b54",
+      "scope": "Reproduction of already-seen test; no retuning or new holdout claims"
+    }
+  ]
+}

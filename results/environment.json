@@ -1,0 +1,24 @@
+{
+  "python": "3.14.6",
+  "model": "intfloat/multilingual-e5-small",
+  "model_revision": "614241f622f53c4eeff9890bdc4f31cfecc418b3",
+  "dimensions": 384,
+  "prefixes": {
+    "query": "query: ",
+    "document": "passage: "
+  },
+  "normalize_embeddings": true,
+  "device": "cpu",
+  "metric": "cosine",
+  "search": "Chroma HNSW approximate; backend defaults",
+  "api_cost_usd": 0,
+  "cost_note": "Local execution; hardware/electricity/network costs not measured",
+  "run_at_utc": "2026-11-13T11:46:00.215089+00:00",
+  "packages": {
+    "sentence-transformers": "6.3.0",
+    "transformers": "5.22.2",
+    "torch": "2.15.0",
+    "chromadb": "1.5.9",
+    "pypdf": "6.21.4"
+  }
+}

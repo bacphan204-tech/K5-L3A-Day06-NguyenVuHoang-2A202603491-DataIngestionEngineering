@@ -1,0 +1,26 @@
+{
+  "reviewer": "Codex AI assistant; not a student/human sign-off",
+  "review_date": "2026-11-13",
+  "excerpt_sha256": "5f19c70f104b0872f125d2a19a0b7b0f488a00ff21ac11b8e4e4fedef21a4043",
+  "method": "Inspected extracted page inventory, a rendered contact sheet of all 53 excerpt pages, and detailed renders for physical excerpt pages 1,2,3,33,34,35,36,53. Verified selected ranges contain chapter instruction/glossary/summary rather than cover, contents, blank or references-only pages.",
+  "selected_content_pages": 52,
+  "excluded_pages": [
+    {
+      "page": 1,
+      "reason": "Copyright/license page; retained for attribution, not indexed or counted"
+    }
+  ],
+  "included_ranges": [
+    [
+      2,
+      34
+    ],
+    [
+      35,
+      53
+    ]
+  ],
+  "short_page_note": "Page 53 has a graph and substantive caption/conclusion about nurses' wages and uncertain employment; eligible instructional content despite low character count.",
+  "limitations": "Contact-sheet review checks overall page content/layout, not every word or graph value. Extracted text/table reading order and individual benchmark evidence still require student review.",
+  "student_review_status": "pending"
+}

@@ -1,0 +1,4 @@
+﻿strategy,chunk_count,min_chars,mean_chars,max_chars,total_chars,total_tokens_including_prefix,max_tokens,ingest_seconds,api_cost_usd,embeddings_reused_from_B,reingest_count,obsolete_removed
+A,344,69,466.86337209302326,500,160601,38829,155,40.32216640000115,0,False,344,0
+B,183,33,797.8196721311475,999,146001,34494,273,34.21148059999905,0,False,183,0
+C,183,33,797.8196721311475,999,146001,34494,273,0.8462671999986924,0,True,183,0

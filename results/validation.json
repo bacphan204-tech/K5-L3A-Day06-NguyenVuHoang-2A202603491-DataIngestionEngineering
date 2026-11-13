@@ -1,0 +1,32 @@
+{
+  "selected_pages": 52,
+  "questions": 20,
+  "evidence_quotes_verified": true,
+  "human_corpus_review": "pending",
+  "final_checks": {
+    "checked_at_utc": "2026-11-13T12:17:33.172316+00:00",
+    "frozen_inputs_unchanged": true,
+    "source_pdf_hash_and_page_mapping": true,
+    "all_gold_quotes_verified": true,
+    "trace_records": 60,
+    "top3_records": 180,
+    "real_384d_normalized_vectors": true,
+    "metrics_recomputed": true,
+    "chunk_coverage_no_missing_characters": true,
+    "isolated_store_regressions": [
+      "repeat-upsert",
+      "remove-obsolete-chunk",
+      "update-metadata",
+      "cosine-self-match",
+      "chapter-filter",
+      "dimension-validation",
+      "length-validation",
+      "filter-allowlist",
+      "reopen-in-new-process"
+    ],
+    "retrieval_adjudication_records": 180,
+    "ai_review_disclosed": true,
+    "student_confirmation": "not recorded",
+    "scope": "Local Windows environment; not a clean-machine install test or a check of GitHub grader permissions"
+  }
+}

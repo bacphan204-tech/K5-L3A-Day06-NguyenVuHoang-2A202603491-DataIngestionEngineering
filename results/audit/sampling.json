@@ -1,0 +1,17 @@
+{
+  "coherence": "All covering chunks at midpoint of first 10 sorted selected PDF pages; report mean within position, then mean over 10 positions.",
+  "grounding": "All five fixed test questions for every strategy, top-3 union evidence.",
+  "metadata": "All five fixed test questions x top-3 x three strategies.",
+  "human_review_status": "AI review recorded; student confirmation pending",
+  "reviewer": "Codex AI assistant; not independent human/student sign-off",
+  "rating_method": "AI read each exported coherence sample and all five test top-3 for A/B/C. Ratings use the stated 0-2 rubric with case-specific reasons, not a conversion from Hit@3. Metadata was checked against PDF text, page mapping and offsets. Same assistant helped build the pipeline and saw retrieval scores; review is unblinded and may be biased.",
+  "legacy_column_note": "human_correct is a legacy column name; reviewer/review_method/student_confirmed identify the actual AI assessment.",
+  "retrieval_note": "Frozen gold and strict metrics unchanged; q17 B/C has equivalent evidence at rank 1, described separately rather than silently changing test gold.",
+  "retrieval_adjudication": {
+    "file": "results/audit/retrieval_adjudication.csv",
+    "records": 180,
+    "method": "Post-hoc AI reading of every unique question/chunk pair, reused only when the same text and question reappear in another strategy. Each rank retains decision/reason; accepted evidence is quoted and checked inside one chunk and the source. Question/text hashes detect stale labels.",
+    "limitations": "Unblinded AI review by the same assistant that helped author the experiment; student confirmation not recorded. Not a new test set, not used to change the original strategy selection.",
+    "outputs": "metrics.csv remains strict; metrics_adjudicated.csv is separate and explicitly labeled"
+  }
+}
